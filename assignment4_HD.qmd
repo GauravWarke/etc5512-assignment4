@@ -45,7 +45,7 @@ How resilient is Australia's supply chain to global freight-price disruptions? S
 **Three angles:**
 
 1.  Do freight prices show clear shock patterns across transport modes?
-2.  How do Australian imports/exports respond when costs rise?
+2.  How does Australian import/export activity respond when costs rise?
 3.  Which business sectors face the highest exposure to freight shocks?
 
 ------------------------------------------------------------------------
@@ -54,12 +54,12 @@ How resilient is Australia's supply chain to global freight-price disruptions? S
 
 **Why these three datasets?**
 
-I selected three complementary ABS releases that together capture the full supply-chain impact. All are quarterly-aligned, publicly licensed (CC BY 4.0), and cover 2019 Q1 -- 2026 Q1.
+I selected three complementary ABS releases that together capture the full supply-chain impact. All are publicly licensed (CC BY 4.0) and cover 2019 Q1 -- 2026 Q1 (29 quarters).
 
 1.  **Producer Price Indexes (cat. 6427.0):**
 
     -   Source: Australian Bureau of Statistics
-    -   Content: Price-side view -- output price indexes for the Transport, Postal and Warehousing division, covering Road, Rail, Sea and Air freight modes
+    -   Content: Price-side view -- quarterly output price indexes for the Transport, Postal and Warehousing division, covering Road, Rail, Sea and Air freight modes (Original series)
     -   Last updated: March quarter 2026 release
     -   Data type: Census of price observations, published as index time series
     -   Limitations: Air freight series only begins 2024 Q1 (9 observations), so its trend is unreliable
@@ -68,16 +68,16 @@ I selected three complementary ABS releases that together capture the full suppl
 2.  **International Trade in Goods (cat. 5368.0):**
 
     -   Source: Australian Bureau of Statistics
-    -   Content: Volume-side view -- monthly/quarterly goods credits (exports) and debits (imports), revealing whether Australia changed trading behaviour in response to freight costs
+    -   Content: Activity-side view -- monthly, seasonally adjusted goods credits (exports) and debits (imports) in current-price \$ millions, revealing whether Australia's trading activity changed in response to freight costs
     -   Last updated: March 2026 release
     -   Data type: Administrative census (customs records)
-    -   Limitations: ABS suppresses \~5% of commodity-level detail under the Confidential Commodities List
+    -   Limitations: Values are nominal (current prices), so price rises are embedded in them -- they measure import/export *spending*, not pure volumes. ABS also suppresses \~5% of commodity-level detail under the Confidential Commodities List. Debits are published as negative values
     -   Privacy/Ethics: Aggregated national flows; confidentiality suppression actively protects individual exporters/importers
 
 3.  **Business Indicators (cat. 5676.0):**
 
     -   Source: Australian Bureau of Statistics
-    -   Content: Sector-side view -- quarterly sales by 15 ANZSIC industry divisions, showing which industries absorbed costs vs. adjusted
+    -   Content: Sector-side view -- quarterly sales by 15 ANZSIC industry divisions, as seasonally adjusted **chain volume measures** (i.e. real, inflation-removed sales), showing which industries' real activity moved with freight costs
     -   Last updated: March quarter 2026 release
     -   Data type: Survey of businesses (stratified sample)
     -   Limitations: Excludes micro non-employing businesses (\~10--15% of the economy)
@@ -91,15 +91,15 @@ I selected three complementary ABS releases that together capture the full suppl
 
 **Downloading the data**
 
-The three raw files were downloaded as time-series spreadsheets from the ABS website and saved as CSVs in `data-raw/`:
+The three raw files were downloaded as time-series tables from the ABS website and saved as CSVs in `data-raw/`:
 
 1.  `ppi.csv` -- visit <https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/producer-price-indexes-australia>, open *Data downloads*, and download the Transport, Postal and Warehousing industries time-series table.
 2.  `trade.csv` -- visit <https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release> and download the goods credits/debits time-series table.
 3.  `biz.csv` -- visit <https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release> and download the sales by industry time-series table.
 
-If any link changes, search the catalogue number (6427.0, 5368.0, 5676.0) on <https://www.abs.gov.au>. Each file keeps the standard ABS layout: 9 metadata rows, then one column per series ID.
+If any link changes, search the catalogue number (6427.0, 5368.0, 5676.0) on <https://www.abs.gov.au>. Each file keeps the standard ABS layout: 9 metadata rows (Unit, Series Type, Data Type, Frequency, Collection Month, Series Start, Series End, No. Obs), then a Series ID header row, then one row per period in `Mon-YYYY` format.
 
-The three lookup files (`ppi_lookup.csv`, `trade_lookup.csv`, `biz_industry_lookup.csv`) are author-created mappings from ABS series IDs to readable labels. Every series ID was manually verified against the ABS March 2026 release (full list in README.txt).
+The three lookup files (`ppi_lookup.csv`, `trade_lookup.csv`, `biz_industry_lookup.csv`) are author-created mappings from ABS series IDs to readable labels. Every series ID was verified against the ABS March 2026 release (full list in README.txt). One transcription error (Administrative and support services, `A3538843R` → corrected to `A3538843C`) was caught during this verification and is reflected in the current lookup file.
 
 **The pipeline has three stages** -- read, transform, save. The chunk below is the complete, runnable ingest pipeline:
 
@@ -108,20 +108,27 @@ The three lookup files (`ppi_lookup.csv`, `trade_lookup.csv`, `biz_industry_look
 # copy-paste the pipeline three times
 process_abs <- function(raw_file, lookup_file, label_col) {
 
-  # Stage 1: read the ABS CSV (skip 9 metadata rows) and the lookup
+  # Stage 1: read the ABS CSV (skip 9 metadata rows so the Series ID
+  # row becomes the header) and read the lookup table
   raw <- read_csv(here("data-raw", raw_file), skip = 9)
   lookup <- read_csv(here("data-raw", lookup_file))
 
   # Stage 2: transform
   tidy <- raw |>
-    rename(date = 1) |>                       # first column is the date
+    rename(date = 1) |>                       # first column holds the dates
     pivot_longer(cols = -date,
                  names_to = "series_id",
                  values_to = "value") |>
     inner_join(lookup, by = "series_id") |>   # keep only verified series
+    # ABS dates look like "Mar-2019", so parse month-year with my()
     mutate(quarter = floor_date(my(date), "quarter")) |>
     filter(quarter >= as.Date("2019-01-01"),
            !is.na(value)) |>
+    # trade debits (imports) are published as negative dollars,
+    # so take absolute values before indexing
+    mutate(value = abs(value)) |>
+    # trade is monthly: average months within each quarter so all
+    # three datasets line up on the same quarterly grid
     group_by(across(all_of(label_col)), quarter) |>
     summarise(value = mean(value), .groups = "drop") |>
     # rebase every series so 2019 Q1 = 100 (comparable across datasets)
@@ -151,7 +158,7 @@ message("✓ Data processed and saved.")
 -   Series IDs loaded from CSV lookup files (transparent, auditable)
 -   Rebasing formula: `index = 100 × (value / baseline_value)` where baseline = 2019 Q1
 -   All three datasets filtered to 2019 Q1 onwards, capturing both shocks: the 2021--22 container crisis and the 2024 Red Sea disruption
--   Output is three tidy `.rds` files sharing the same schema (`quarter`, category, `index`) so they join cleanly on `quarter`
+-   Output is three tidy `.rds` files sharing the same schema (`quarter`, category, `index`) so they join cleanly on `quarter`: ppi 96 rows (Road/Rail/Sea × 29 quarters + Air × 9), trade 58 rows (2 × 29), biz 435 rows (15 × 29)
 
 ------------------------------------------------------------------------
 
@@ -192,20 +199,30 @@ trade <- readRDS(here("data-processed", "trade.rds"))
 biz   <- readRDS(here("data-processed", "biz.rds"))
 
 # values used inline in the text below
-sea <- ppi |> filter(mode == "Sea")
+sea      <- ppi |> filter(mode == "Sea")
 peak_sea <- max(sea$index, na.rm = TRUE)
 peak_qtr <- sea$quarter[which.max(sea$index)]
+
+road_max <- ppi |> filter(mode == "Road", quarter <= "2022-12-31") |>
+  pull(index) |> max()
+rail_max <- ppi |> filter(mode == "Rail", quarter <= "2022-12-31") |>
+  pull(index) |> max()
+
+imp_shock_max <- trade |>
+  filter(flow == "Imports",
+         quarter >= "2021-07-01", quarter <= "2022-12-31") |>
+  pull(index) |> max()
 ```
 
 ### Why should ETC5512 students care about freight prices?
 
 In 2021, global shipping rates roughly tripled. Containers that cost about USD 2,000 to move from Asia to Australia were suddenly quoted at USD 6,000 or more. Then in 2024, attacks on shipping in the Red Sea forced vessels around the Cape of Good Hope, creating a second cost wave. For an island economy that imports most of its manufactured goods, the question for Australian businesses was simple: adapt or absorb?
 
-"Adapt" would mean visible changes in trade volumes -- fewer imports, switched suppliers, different transport modes. "Absorb" would mean trade carries on while margins quietly compress. These two responses leave very different fingerprints in open data, which is exactly what makes this a question we can answer with the skills from this unit: finding fit-for-purpose official data, joining datasets that were never designed to be joined, and being honest about what the result can and cannot tell us.
+"Adapt" would mean visible changes in trading activity -- fewer imports, switched suppliers, different transport modes. "Absorb" would mean trade carries on while margins quietly compress. These two responses leave very different fingerprints in open data, which is exactly what makes this a question we can answer with the skills from this unit: finding fit-for-purpose official data, joining datasets that were never designed to be joined, and being honest about what the result can and cannot tell us.
 
 ### Where does the data come from?
 
-Everything here is free, public ABS data: freight Producer Price Indexes (the cost side), International Trade in Goods (the volume side), and Business Indicators sales by industry (the sector side). The three releases share nothing except time, so I rebased every series to an index where **2019 Q1 = 100** and joined on quarter. An index of 150 simply means "50% above the pre-COVID baseline" -- which makes a freight price, an import volume, and retail sales directly comparable on one scale. Full sourcing, series-ID verification and the processing pipeline are in the Data Details tab and README.
+Everything here is free, public ABS data: freight Producer Price Indexes (the cost side), International Trade in Goods (the spending side -- nominal, seasonally adjusted dollars), and Business Indicators sales by industry (the sector side -- real, chain-volume sales). The three releases share nothing except time, so I rebased every series to an index where **2019 Q1 = 100** and joined on quarter, averaging the monthly trade data within quarters. An index of 150 simply means "50% above the pre-COVID baseline" -- which makes a freight price, an import bill, and retail sales directly comparable on one scale. Full sourcing, series-ID verification and the processing pipeline are in the Data Details tab and README.
 
 ### Finding 1: The price shock was real -- and it was maritime
 
@@ -219,38 +236,40 @@ ggplot(ppi, aes(x = quarter, y = index, colour = mode)) +
             inherit.aes = FALSE, fill = "grey85", alpha = 0.6) +
   geom_hline(yintercept = 100, linetype = "dashed", colour = "grey50") +
   geom_line(linewidth = 0.9) +
-  labs(title = "Sea freight spiked; road and rail barely moved",
+  labs(title = "Sea freight tripled; road and rail rose modestly",
        x = "Quarter", y = "Index (2019 Q1 = 100)", colour = "Mode") +
   theme_minimal()
 ```
 
-Sea-freight prices more than doubled relative to the 2019 baseline, peaking at an index of `r round(peak_sea)` in `r paste0(year(peak_qtr), " Q", quarter(peak_qtr))`. This wasn't a gradual trend -- it was a sharp, sustained spike concentrated in the shaded 2021--22 window, with a smaller echo in 2024. Road and rail freight rose only modestly (roughly 10--15%), which tells us the shock was maritime-specific rather than economy-wide transport inflation. (Air freight only enters the data in 2024, so I show it for completeness but don't lean on it.)
+Sea-freight prices **tripled** relative to the 2019 baseline, peaking at an index of `r round(peak_sea)` in `r paste0(year(peak_qtr), " Q", quarter(peak_qtr))` -- roughly 200% above pre-COVID levels. This wasn't a gradual trend; it was a sharp spike concentrated in the shaded 2021--22 window, followed by an equally dramatic fall and a smaller echo in 2024. Over the same shock period, road freight peaked at just `r round(road_max)` and rail at `r round(rail_max)` -- rises of under 20% -- which tells us the shock was maritime-specific rather than economy-wide transport inflation. (Air freight only enters the data in 2024, so I show it for completeness but don't lean on it.)
 
-**What this means:** for importers, this was the largest single-episode freight cost increase in at least a decade. Either consumer prices went up, or margins compressed.
+**What this means:** for anything arriving by ship, this was the largest freight cost shock in at least a decade. Either consumer prices went up, or margins compressed.
 
-### Finding 2: Trade volumes barely flinched
+### Finding 2: Imports didn't retreat -- Australia paid up
 
-```{r fig-trade, eval=TRUE, fig.cap="Australian goods exports and imports, rebased to 2019 Q1 = 100. Shaded bands as in Figure 1."}
+```{r fig-trade, eval=TRUE, fig.cap="Australian goods exports and imports (nominal, seasonally adjusted), rebased to 2019 Q1 = 100. Shaded bands as in Figure 1."}
 ggplot(trade, aes(x = quarter, y = index, colour = flow)) +
   geom_rect(data = shocks,
             aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
             inherit.aes = FALSE, fill = "grey85", alpha = 0.6) +
   geom_hline(yintercept = 100, linetype = "dashed", colour = "grey50") +
   geom_line(linewidth = 0.9) +
-  labs(title = "Imports and exports stayed within normal ranges through both shocks",
+  labs(title = "Import spending rose through the freight shock — no retreat",
        x = "Quarter", y = "Index (2019 Q1 = 100)", colour = "Flow") +
   theme_minimal()
 ```
 
-Here is the surprise. Despite sea-freight costs rising roughly 65% above baseline, Australian import volumes did not collapse -- they stayed within normal seasonal ranges through both shock windows. If businesses had been restructuring supply chains at scale, we would expect a visible dent in imports during 2021--22. There isn't one.
+If businesses had responded to tripled shipping costs by cutting orders or hurriedly switching to local suppliers, we would expect a visible dent in import activity during 2021--22. The opposite happened: nominal import spending *rose* through the shock window, peaking around `r round(imp_shock_max)` -- about `r round(imp_shock_max - 100)`% above the 2019 baseline -- and never dipped below trend.
 
-**The mechanism:** companies chose to wear the cost rather than rebuild their supply chains. That is economically rational -- qualifying a new supplier takes 6--12 months, while paying a higher freight invoice is immediate. Absorption is the fast option, and the data says it's the one firms took.
+One honest caveat: these are current-price values, so part of that rise *is* the higher freight and goods prices being passed through. But that's precisely the absorption fingerprint -- if adjustment had dominated, falling quantities would have dragged spending down despite higher prices. Instead, Australia kept importing and simply paid more.
 
-### Finding 3: Exposure is concentrated exactly where you'd expect
+**The mechanism:** qualifying a new supplier takes 6--12 months; paying a higher freight invoice is immediate. Absorption is the fast option, and the data says it's the one firms took.
 
-If costs were absorbed, the pain should show up unevenly -- in the sectors that physically handle imported goods. To test this, I correlated each industry's quarterly sales index with the sea-freight price index over the full 2019--2026 window.
+### Finding 3: Exposure rankings tell a story -- and a cautionary tale
 
-```{r fig-exposure, eval=TRUE, fig.cap="Pearson correlation between each industry's sales index and the sea-freight PPI, 2019 Q1 – 2026 Q1."}
+If costs were absorbed, the pain should show up unevenly across sectors. To test this, I correlated each industry's real (chain-volume) sales index with the sea-freight price index over the full 29-quarter window.
+
+```{r fig-exposure, eval=TRUE, fig.cap="Pearson correlation between each industry's real sales index and the sea-freight PPI, 2019 Q1 – 2026 Q1."}
 sea_idx <- sea |> select(quarter, sea_index = index)
 
 exposure <- biz |>
@@ -264,7 +283,7 @@ ggplot(exposure,
            fill = correlation > 0)) +
   geom_col(show.legend = FALSE) +
   geom_vline(xintercept = 0, colour = "grey40") +
-  labs(title = "Trade-facing sectors move with sea-freight prices",
+  labs(title = "Wholesale trade moves most closely with sea-freight prices",
        x = "Correlation with sea-freight PPI", y = NULL) +
   theme_minimal()
 ```
@@ -274,19 +293,39 @@ exposure |>
   slice(c(1:3, (n() - 2):n())) |>
   mutate(correlation = round(correlation, 2)) |>
   kbl(col.names = c("Industry", "Correlation with sea-freight PPI"),
-      caption = "Three most and three least freight-exposed industries.") |>
+      caption = "Three most and three least freight-correlated industries.") |>
   kable_styling(full_width = FALSE)
 ```
 
-Wholesale trade, Manufacturing and Retail sit at the top, with correlations of roughly +0.50 to +0.58 -- these are the industries whose stock literally arrives in containers. At the other end, Financial services and Information media are essentially insulated (correlations near zero). The ranking is almost a map of how physically import-dependent each sector is.
+Wholesale trade tops the ranking (r ≈ `r round(exposure$correlation[1], 2)`), which fits the story perfectly -- wholesalers are the sector whose stock literally arrives in containers, and their sales moved most closely with shipping costs. At the bottom sit Construction and Mining (r ≈ 0), domestically anchored sectors the shock largely bypassed.
 
-**Policy implication:** if governments want to cushion future freight shocks, narrowly targeted support for wholesale, manufacturing and retail would be far more efficient than broad-based assistance to sectors the shock never reaches.
+But the middle of the ranking is a lesson in critical thinking. Professional services correlates almost as highly as Wholesale -- with no container ships involved -- while Manufacturing, which I expected near the top, sits at only r ≈ 0.16. Correlations between *levels* of two series partly capture the fact that everything grew together through the post-COVID recovery, not just freight exposure. The signal is most trustworthy at the extremes (Wholesale clearly co-moves; Construction and Mining clearly don't), and weakest in the middle.
+
+```{r robustness, eval=TRUE}
+# robustness check: redo the correlation on quarter-on-quarter changes,
+# which strips out the shared post-COVID growth trend
+qoq <- biz |>
+  inner_join(sea_idx, by = "quarter") |>
+  group_by(industry) |>
+  arrange(quarter, .by_group = TRUE) |>
+  mutate(d_sales = index / lag(index) - 1,
+         d_sea   = sea_index / lag(sea_index) - 1) |>
+  summarise(corr_changes = cor(d_sales, d_sea, use = "complete.obs"))
+
+wholesale_chg <- qoq |>
+  filter(industry == "Wholesale trade") |>
+  pull(corr_changes)
+```
+
+I tested this directly: recomputing every correlation on quarter-on-quarter *changes* instead of levels strips out the shared trend, and most of the relationships vanish -- Wholesale falls from +`r round(exposure$correlation[1], 2)` to `r round(wholesale_chg, 2)`. Far from undermining the story, this strengthens it: quarter to quarter, sector sales simply did not respond to freight swings, which is exactly the fingerprint absorption should leave. The level correlations describe who lived through the shock alongside freight prices; the change correlations confirm nobody flinched in real time.
+
+**Policy implication:** if governments want to cushion future freight shocks, the distribution-facing sectors -- wholesale and retail trade -- are where targeted support would land on genuine exposure. But any targeting rule built on raw correlations alone would mis-classify sectors, which is an argument for the lagged, causally identified analysis described in Behind the Scenes.
 
 ### The bottom line
 
-Australia's supply chains proved resilient through **cost absorption, not adjustment**. Freight prices spiked (Finding 1), trade volumes held (Finding 2), and the cost burden landed on the trade-intensive sectors (Finding 3). Businesses bent under the pressure but didn't break their supply chains -- a resilience that came at the cost of compressed margins and, ultimately, higher consumer prices.
+Australia's supply chains proved resilient through **cost absorption, not adjustment**. Sea-freight prices tripled (Finding 1), import spending rose rather than retreated (Finding 2), and co-movement with freight costs concentrated in the distribution-facing sectors that physically handle imports (Finding 3). Businesses bent under the pressure but didn't break their supply chains -- a resilience that came at the cost of compressed margins and, ultimately, higher consumer prices.
 
-One caveat before you cite this in your own work: everything above is co-movement, not causation. Freight prices and sector sales could both be responding to a third force such as global demand. The Behind the Scenes tab discusses what a causal version of this analysis would need.
+One caveat before you cite this in your own work: everything above is co-movement, not causation. Freight prices, import spending and sector sales could all be responding to a third force such as global demand. The Behind the Scenes tab discusses what a causal version of this analysis would need.
 
 ### References
 
@@ -303,6 +342,17 @@ Full data and software citations are listed in the Data Details tab.
 <!-- ==================================================== -->
 
 ## Behind the Scenes
+
+<!-- TODO (Gaurav, in your own words — these reflections must stay yours):
+The verified analysis changed some numbers your reflections reference.
+Update them yourself so Task 2 and Task 3 are consistent:
+  - Sea freight peaked ~3x baseline (index ~302, 2022 Q3), not "65%".
+  - Q5 says imports "flowed on as normal" — check this against your
+    rendered Figure 2 once trade.csv is processed (trade.csv could not
+    be verified externally), and restate in your own words.
+  - You may also want to mention catching the A3538843R → A3538843C
+    lookup typo during verification (it fits your Q4 theme perfectly).
+Delete this comment before submitting. -->
 
 ### Question 4: What Was Tedious?
 
@@ -365,4 +415,4 @@ Delete this comment before submitting. -->
 
 ------------------------------------------------------------------------
 
-Last updated: June 6, 2026
+Last updated: June 11, 2026
