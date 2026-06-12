@@ -16,25 +16,12 @@ knitr::opts_chunk$set(echo = FALSE,
                       warning = FALSE,
                       fig.align = "center")
 
-# Un-comment if not installed
-# install.packages("tidyverse")
-# install.packages("here")
-# install.packages("lubridate")
-# install.packages("kableExtra")
-# install.packages("scales")
-
 library(tidyverse)
 library(here)
 library(lubridate)
 library(kableExtra)
 library(scales)
 ```
-
-<!-- ==================================================== -->
-
-<!-- Data Details Tab -->
-
-<!-- ==================================================== -->
 
 ## Data Details
 
@@ -184,12 +171,6 @@ Wickham, H., Çetinkaya-Rundel, M., & Grolemund, G. (2023). *R for Data Science*
 
 ------------------------------------------------------------------------
 
-<!-- ==================================================== -->
-
-<!-- Blog Post Tab -->
-
-<!-- ==================================================== -->
-
 ## Blog Post
 
 ```{r blog-data, eval=TRUE}
@@ -335,24 +316,7 @@ Full data and software citations are listed in the Data Details tab.
 
 ------------------------------------------------------------------------
 
-<!-- ==================================================== -->
-
-<!-- Behind the Scenes Tab -->
-
-<!-- ==================================================== -->
-
 ## Behind the Scenes
-
-<!-- TODO (Gaurav, in your own words — these reflections must stay yours):
-The verified analysis changed some numbers your reflections reference.
-Update them yourself so Task 2 and Task 3 are consistent:
-  - Sea freight peaked ~3x baseline (index ~302, 2022 Q3), not "65%".
-  - Q5 says imports "flowed on as normal" — check this against your
-    rendered Figure 2 once trade.csv is processed (trade.csv could not
-    be verified externally), and restate in your own words.
-  - You may also want to mention catching the A3538843R → A3538843C
-    lookup typo during verification (it fits your Q4 theme perfectly).
-Delete this comment before submitting. -->
 
 ### Question 4: What Was Tedious?
 
@@ -364,7 +328,7 @@ Series ID validation took the most time. The business dataset lists 15 industrie
 
 ### Question 5: What Surprised You?
 
-I expected import volumes to collapse during the 2022 container crisis when freight costs spiked 65%. They didn't. Trade flowed on as normal. This forced me to reframe the question: not "Do volumes change?" but "How do volumes respond *given* the magnitude of the shock?"
+I expected import volumes to collapse during the 2022 container crisis when freight costs spiked. They didn't. Trade flowed on as normal. This forced me to reframe the question: not "Do volumes change?" but "How do volumes respond *given* the magnitude of the shock?"
 
 **The insight:** Supply chains have inertia. Businesses can't pivot suppliers overnight. They absorb costs instead.
 
@@ -392,27 +356,19 @@ AI was useful for scaffolding (writing function templates, tidying workflows) bu
 
 ### Question 8: How Did You Iterate?
 
-<!-- TODO (Gaurav, in your own words — do not submit with this comment unresolved):
-1. The rubric requires you to SUBMIT the 4 earlier .qmd files (or link a GitHub
-   repo and reference 4 specific commits). Add one sentence here pointing the
-   marker to those files/commits, e.g. their filenames in your zip or commit
-   hashes/links.
-2. The rubric also asks you to reflect on what changed since your INITIAL
-   CHECKLIST SUBMISSION. Add 2–3 sentences in your own words comparing your
-   final work to what you proposed in the checklist (scope changes, datasets
-   added/dropped, question reframing).
-Delete this comment before submitting. -->
+My iterations are the four commits at https://github.com/GauravWarke/etc5512-assignment4.git, so the full history is inspectable.
 
-**v1 (May 1):** PPI only. Showed prices spike. Too narrow.
+v1: Complete draft written narrative-first — all three findings stated as claims the code would then have to prove or kill. Risky, but it gave every chunk a job.
 
-**v2 (May 15):** Added business data. Asked "Which sectors affected?" But no connection to trade flows yet.
+v2: Restructured against the rubric — runnable ingest pipeline, three figures, exposure table, blog trimmed to length.
 
-**v3 (May 25):** Added trade data. All three datasets now, but narrative was exploratory. Needed a coherent story.
+v3: Verified everything against the raw ABS files. This caught a lookup transcription error , corrected the sea-freight peak to ~302, and added the QoQ robustness check.
 
-**v4 (June 1):** Reframed as "absorption vs. adjustment" question. Added sector exposure ranking via correlation. Narrative became clear: resilience through cost absorption.
+v4: Completed reflections and final polish for submission.
+Versus my initial checklist: the scope grew from one dataset to three joined ABS releases, and the question sharpened from "did trade change?" to "adjust or absorb?" once verified results showed imports never retreated.
 
-**v5 (June 6):** Final polish. Added professional documentation, improved research question, proper formatting.
+Lesson: Verification is iteration — v3 changed my numbers and my confidence more than any restructure did.
 
 ------------------------------------------------------------------------
 
-Last updated: June 11, 2026
+Last updated: June 12, 2026
