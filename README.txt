@@ -1,5 +1,5 @@
 ==================================================================
-ASSIGNMENT 4: AUSTRALIAN SUPPLY-CHAIN RESILIENCE TO FREIGHT SHOCKS
+AUSTRALIAN SUPPLY-CHAIN RESILIENCE TO FREIGHT SHOCKS
 ==================================================================
 
 Author: Gaurav Warke (36782122)
@@ -315,19 +315,19 @@ Questions: gaurav.warke@monash.edu
 Version History
 ===============
 
-v1.0 (June 6, 2026) — Initial final draft
+v1.0  — Initial final draft
   - All three datasets integrated
   - Narrative focused on absorption vs. adjustment
   - Professional documentation
 
-v1.1 (June 2026) — Reproducibility and analysis alignment
+v1.1  — Reproducibility and analysis alignment
   - Full runnable ingest pipeline embedded in qmd ("ingest" chunk),
     matching the reproduction steps in this README
   - Three figures, one summary table and inline computed values added
     to the Blog Post tab
   - ABS download URLs documented; R package citations added
 
-v1.2 (June 11, 2026) — Verified against raw data
+v1.2 — Verified against raw data
   - Corrected biz_industry_lookup.csv: A3538843R → A3538843C
     (Administrative and support services)
   - Fixed date parsing (Mon-YYYY format → lubridate::my())
