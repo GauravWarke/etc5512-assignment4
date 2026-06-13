@@ -8,7 +8,6 @@ Assignment 4 ETC5512
 
 Gaurav Warke (36782122)
 
-Due Date: June 9, 2026
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE,
@@ -371,4 +370,11 @@ Lesson: Verification is iteration — v3 changed my numbers and my confidence mo
 
 ------------------------------------------------------------------------
 
-Last updated: June 12, 2026
+## AI use
+
+Tasks 1 & 2 (Data Details, Blog post): AI assistance was substantial and is fully declared. I used it to review my draft against the rubric, restructure the document, write and refine the ingest pipeline and the three visualisations, and verify my analysis against the raw ABS files. That verification caught real errors — a series-ID transcription mistake (A3538843R → A3538843C, which was silently dropping an industry) and an overstated freight-spike figure — which I then corrected. I checked all outputs against the rendered results rather than accepting them blind.
+
+Task 3 (Behind the Scenes): The Q4–Q8 reflections are my own writing. AI was used only to check coverage and word limits and to format the Git commit references in Q8.
+
+Verification: Where AI produced code or claims, I confirmed them by rendering the document and checking figures and numbers against the data — mirroring Q7, where AI hallucinated series IDs I had to verify manually.
+

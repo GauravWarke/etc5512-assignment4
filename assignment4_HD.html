@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>assignment4_hd</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="assignment4_HD_files/libs/clipboard/clipboard.min.js"></script>
+<script src="assignment4_HD_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="assignment4_HD_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="assignment4_HD_files/libs/quarto-html/popper.min.js"></script>
+<script src="assignment4_HD_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="assignment4_HD_files/libs/quarto-html/anchor.min.js"></script>
+<link href="assignment4_HD_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="assignment4_HD_files/libs/quarto-html/quarto-syntax-highlighting-7c69b197886ae2a34062761d21e44731.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="assignment4_HD_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="assignment4_HD_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="assignment4_HD_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="assignment4_HD_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+<link href="assignment4_HD_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="supply-chain-resilience-to-freight-price-shocks-in-australia" class="level1 tabset">
+<h1 class="tabset">Supply-Chain Resilience to Freight-Price Shocks in Australia</h1>
+<p>Assignment 4 ETC5512</p>
+<p>Gaurav Warke (36782122)</p>
+<p>Due Date: June 9, 2026</p>
+<section id="data-details" class="level2">
+<h2 class="anchored" data-anchor-id="data-details">Data Details</h2>
+<section id="question-1-research-question" class="level3">
+<h3 class="anchored" data-anchor-id="question-1-research-question">Question 1: Research Question</h3>
+<p>How resilient is Australia’s supply chain to global freight-price disruptions? Specifically, when shipping costs spike, do businesses adjust trade patterns or absorb costs through margins?</p>
+<p><strong>Three angles:</strong></p>
+<ol type="1">
+<li>Do freight prices show clear shock patterns across transport modes?</li>
+<li>How does Australian import/export activity respond when costs rise?</li>
+<li>Which business sectors face the highest exposure to freight shocks?</li>
+</ol>
+<hr>
+</section>
+<section id="question-2-data-suitability" class="level3">
+<h3 class="anchored" data-anchor-id="question-2-data-suitability">Question 2: Data Suitability</h3>
+<p><strong>Why these three datasets?</strong></p>
+<p>I selected three complementary ABS releases that together capture the full supply-chain impact. All are publicly licensed (CC BY 4.0) and cover 2019 Q1 – 2026 Q1 (29 quarters).</p>
+<ol type="1">
+<li><p><strong>Producer Price Indexes (cat. 6427.0):</strong></p>
+<ul>
+<li>Source: Australian Bureau of Statistics</li>
+<li>Content: Price-side view – quarterly output price indexes for the Transport, Postal and Warehousing division, covering Road, Rail, Sea and Air freight modes (Original series)</li>
+<li>Last updated: March quarter 2026 release</li>
+<li>Data type: Census of price observations, published as index time series</li>
+<li>Limitations: Air freight series only begins 2024 Q1 (9 observations), so its trend is unreliable</li>
+<li>Privacy/Ethics: Aggregated indexes; no individual businesses identifiable</li>
+</ul></li>
+<li><p><strong>International Trade in Goods (cat. 5368.0):</strong></p>
+<ul>
+<li>Source: Australian Bureau of Statistics</li>
+<li>Content: Activity-side view – monthly, seasonally adjusted goods credits (exports) and debits (imports) in current-price $ millions, revealing whether Australia’s trading activity changed in response to freight costs</li>
+<li>Last updated: March 2026 release</li>
+<li>Data type: Administrative census (customs records)</li>
+<li>Limitations: Values are nominal (current prices), so price rises are embedded in them – they measure import/export <em>spending</em>, not pure volumes. ABS also suppresses ~5% of commodity-level detail under the Confidential Commodities List. Debits are published as negative values</li>
+<li>Privacy/Ethics: Aggregated national flows; confidentiality suppression actively protects individual exporters/importers</li>
+</ul></li>
+<li><p><strong>Business Indicators (cat. 5676.0):</strong></p>
+<ul>
+<li>Source: Australian Bureau of Statistics</li>
+<li>Content: Sector-side view – quarterly sales by 15 ANZSIC industry divisions, as seasonally adjusted <strong>chain volume measures</strong> (i.e.&nbsp;real, inflation-removed sales), showing which industries’ real activity moved with freight costs</li>
+<li>Last updated: March quarter 2026 release</li>
+<li>Data type: Survey of businesses (stratified sample)</li>
+<li>Limitations: Excludes micro non-employing businesses (~10–15% of the economy)</li>
+<li>Privacy/Ethics: Survey responses aggregated to industry division level; no direct identifiers</li>
+</ul></li>
+</ol>
+<p><strong>Shared limitation:</strong> all three datasets support co-movement analysis only – correlations in this work are not evidence of causation.</p>
+<hr>
+</section>
+<section id="question-3-download-and-processing-steps" class="level3">
+<h3 class="anchored" data-anchor-id="question-3-download-and-processing-steps">Question 3: Download and Processing Steps</h3>
+<p><strong>Downloading the data</strong></p>
+<p>The three raw files were downloaded as time-series tables from the ABS website and saved as CSVs in <code>data-raw/</code>:</p>
+<ol type="1">
+<li><code>ppi.csv</code> – visit <a href="https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/producer-price-indexes-australia" class="uri">https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/producer-price-indexes-australia</a>, open <em>Data downloads</em>, and download the Transport, Postal and Warehousing industries time-series table.</li>
+<li><code>trade.csv</code> – visit <a href="https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release" class="uri">https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release</a> and download the goods credits/debits time-series table.</li>
+<li><code>biz.csv</code> – visit <a href="https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release" class="uri">https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release</a> and download the sales by industry time-series table.</li>
+</ol>
+<p>If any link changes, search the catalogue number (6427.0, 5368.0, 5676.0) on <a href="https://www.abs.gov.au" class="uri">https://www.abs.gov.au</a>. Each file keeps the standard ABS layout: 9 metadata rows (Unit, Series Type, Data Type, Frequency, Collection Month, Series Start, Series End, No.&nbsp;Obs), then a Series ID header row, then one row per period in <code>Mon-YYYY</code> format.</p>
+<p>The three lookup files (<code>ppi_lookup.csv</code>, <code>trade_lookup.csv</code>, <code>biz_industry_lookup.csv</code>) are author-created mappings from ABS series IDs to readable labels. Every series ID was verified against the ABS March 2026 release (full list in README.txt). One transcription error (Administrative and support services, <code>A3538843R</code> → corrected to <code>A3538843C</code>) was caught during this verification and is reflected in the current lookup file.</p>
+<p><strong>The pipeline has three stages</strong> – read, transform, save. The chunk below is the complete, runnable ingest pipeline:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># helper function: same three stages for each dataset, so I don't</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># copy-paste the pipeline three times</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>process_abs <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_file, lookup_file, label_col) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Stage 1: read the ABS CSV (skip 9 metadata rows so the Series ID</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># row becomes the header) and read the lookup table</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data-raw"</span>, raw_file), <span class="at">skip =</span> <span class="dv">9</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  lookup <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data-raw"</span>, lookup_file))</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Stage 2: transform</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  tidy <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">date =</span> <span class="dv">1</span>) <span class="sc">|&gt;</span>                       <span class="co"># first column holds the dates</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>date,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">names_to =</span> <span class="st">"series_id"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">values_to =</span> <span class="st">"value"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">inner_join</span>(lookup, <span class="at">by =</span> <span class="st">"series_id"</span>) <span class="sc">|&gt;</span>   <span class="co"># keep only verified series</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ABS dates look like "Mar-2019", so parse month-year with my()</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">quarter =</span> <span class="fu">floor_date</span>(<span class="fu">my</span>(date), <span class="st">"quarter"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(quarter <span class="sc">&gt;=</span> <span class="fu">as.Date</span>(<span class="st">"2019-01-01"</span>),</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># trade debits (imports) are published as negative dollars,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># so take absolute values before indexing</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">abs</span>(value)) <span class="sc">|&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># trade is monthly: average months within each quarter so all</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># three datasets line up on the same quarterly grid</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(label_col)), quarter) <span class="sc">|&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">mean</span>(value), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># rebase every series so 2019 Q1 = 100 (comparable across datasets)</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(label_col))) <span class="sc">|&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(quarter, <span class="at">.by_group =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">index =</span> <span class="dv">100</span> <span class="sc">*</span> value <span class="sc">/</span> <span class="fu">first</span>(value)) <span class="sc">|&gt;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">all_of</span>(label_col), quarter, index)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(tidy)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>ppi   <span class="ot">&lt;-</span> <span class="fu">process_abs</span>(<span class="st">"ppi.csv"</span>,   <span class="st">"ppi_lookup.csv"</span>,          <span class="st">"mode"</span>)</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>trade <span class="ot">&lt;-</span> <span class="fu">process_abs</span>(<span class="st">"trade.csv"</span>, <span class="st">"trade_lookup.csv"</span>,        <span class="st">"flow"</span>)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>biz   <span class="ot">&lt;-</span> <span class="fu">process_abs</span>(<span class="st">"biz.csv"</span>,   <span class="st">"biz_industry_lookup.csv"</span>, <span class="st">"industry"</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage 3: save processed data so the blog chunks can re-use it</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(ppi,   <span class="fu">here</span>(<span class="st">"data-processed"</span>, <span class="st">"ppi.rds"</span>))</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(trade, <span class="fu">here</span>(<span class="st">"data-processed"</span>, <span class="st">"trade.rds"</span>))</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(biz,   <span class="fu">here</span>(<span class="st">"data-processed"</span>, <span class="st">"biz.rds"</span>))</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"✓ Data processed and saved."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Series IDs loaded from CSV lookup files (transparent, auditable)</li>
+<li>Rebasing formula: <code>index = 100 × (value / baseline_value)</code> where baseline = 2019 Q1</li>
+<li>All three datasets filtered to 2019 Q1 onwards, capturing both shocks: the 2021–22 container crisis and the 2024 Red Sea disruption</li>
+<li>Output is three tidy <code>.rds</code> files sharing the same schema (<code>quarter</code>, category, <code>index</code>) so they join cleanly on <code>quarter</code>: ppi 96 rows (Road/Rail/Sea × 29 quarters + Air × 9), trade 58 rows (2 × 29), biz 435 rows (15 × 29)</li>
+</ul>
+<hr>
+</section>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p>Australian Bureau of Statistics. (2026). <em>Producer Price Indexes, Australia</em> (cat. 6427.0). <a href="https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/producer-price-indexes-australia" class="uri">https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/producer-price-indexes-australia</a>. Accessed 6 June 2026.</p>
+<p>Australian Bureau of Statistics. (2026). <em>International Trade in Goods, Australia</em> (cat. 5368.0). <a href="https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release" class="uri">https://www.abs.gov.au/statistics/economy/international-trade/international-trade-goods/latest-release</a>. Accessed 6 June 2026.</p>
+<p>Australian Bureau of Statistics. (2026). <em>Business Indicators, Australia</em> (cat. 5676.0). <a href="https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release" class="uri">https://www.abs.gov.au/statistics/economy/business-indicators/business-indicators-australia/latest-release</a>. Accessed 6 June 2026.</p>
+<p>Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” <em>Journal of Open Source Software</em>, 4(43), 1686. <a href="https://doi.org/10.21105/joss.01686" class="uri">https://doi.org/10.21105/joss.01686</a>.</p>
+<p>Müller K (2020). <em>here: A Simpler Way to Find Your Files</em>. R package version 1.0.1. <a href="https://CRAN.R-project.org/package=here" class="uri">https://CRAN.R-project.org/package=here</a>.</p>
+<p>Grolemund G, Wickham H (2011). “Dates and Times Made Easy with lubridate.” <em>Journal of Statistical Software</em>, 40(3), 1–25. <a href="https://www.jstatsoft.org/v40/i03/" class="uri">https://www.jstatsoft.org/v40/i03/</a>.</p>
+<p>Zhu H (2024). <em>kableExtra: Construct Complex Table with ‘kable’ and Pipe Syntax</em>. R package version 1.4.0. <a href="https://CRAN.R-project.org/package=kableExtra" class="uri">https://CRAN.R-project.org/package=kableExtra</a>.</p>
+<p>Wickham H, Pedersen T, Seidel D (2023). <em>scales: Scale Functions for Visualization</em>. R package version 1.3.0. <a href="https://CRAN.R-project.org/package=scales" class="uri">https://CRAN.R-project.org/package=scales</a>.</p>
+<p>Wickham, H., Çetinkaya-Rundel, M., &amp; Grolemund, G. (2023). <em>R for Data Science</em> (2nd ed.). O’Reilly Media.</p>
+<hr>
+</section>
+</section>
+<section id="blog-post" class="level2">
+<h2 class="anchored" data-anchor-id="blog-post">Blog Post</h2>
+<section id="why-should-etc5512-students-care-about-freight-prices" class="level3">
+<h3 class="anchored" data-anchor-id="why-should-etc5512-students-care-about-freight-prices">Why should ETC5512 students care about freight prices?</h3>
+<p>In 2021, global shipping rates roughly tripled. Containers that cost about USD 2,000 to move from Asia to Australia were suddenly quoted at USD 6,000 or more. Then in 2024, attacks on shipping in the Red Sea forced vessels around the Cape of Good Hope, creating a second cost wave. For an island economy that imports most of its manufactured goods, the question for Australian businesses was simple: adapt or absorb?</p>
+<p>“Adapt” would mean visible changes in trading activity – fewer imports, switched suppliers, different transport modes. “Absorb” would mean trade carries on while margins quietly compress. These two responses leave very different fingerprints in open data, which is exactly what makes this a question we can answer with the skills from this unit: finding fit-for-purpose official data, joining datasets that were never designed to be joined, and being honest about what the result can and cannot tell us.</p>
+</section>
+<section id="where-does-the-data-come-from" class="level3">
+<h3 class="anchored" data-anchor-id="where-does-the-data-come-from">Where does the data come from?</h3>
+<p>Everything here is free, public ABS data: freight Producer Price Indexes (the cost side), International Trade in Goods (the spending side – nominal, seasonally adjusted dollars), and Business Indicators sales by industry (the sector side – real, chain-volume sales). The three releases share nothing except time, so I rebased every series to an index where <strong>2019 Q1 = 100</strong> and joined on quarter, averaging the monthly trade data within quarters. An index of 150 simply means “50% above the pre-COVID baseline” – which makes a freight price, an import bill, and retail sales directly comparable on one scale. Full sourcing, series-ID verification and the processing pipeline are in the Data Details tab and README.</p>
+</section>
+<section id="finding-1-the-price-shock-was-real-and-it-was-maritime" class="level3">
+<h3 class="anchored" data-anchor-id="finding-1-the-price-shock-was-real-and-it-was-maritime">Finding 1: The price shock was real – and it was maritime</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-ppi" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ppi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment4_HD_files/figure-html/fig-ppi-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ppi-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Freight price indexes by mode, rebased to 2019 Q1 = 100. Shaded bands mark the 2021–22 container crisis and the 2024 Red Sea disruption.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Sea-freight prices <strong>tripled</strong> relative to the 2019 baseline, peaking at an index of 302 in 2022 Q3 – roughly 200% above pre-COVID levels. This wasn’t a gradual trend; it was a sharp spike concentrated in the shaded 2021–22 window, followed by an equally dramatic fall and a smaller echo in 2024. Over the same shock period, road freight peaked at just 118 and rail at 113 – rises of under 20% – which tells us the shock was maritime-specific rather than economy-wide transport inflation. (Air freight only enters the data in 2024, so I show it for completeness but don’t lean on it.)</p>
+<p><strong>What this means:</strong> for anything arriving by ship, this was the largest freight cost shock in at least a decade. Either consumer prices went up, or margins compressed.</p>
+</section>
+<section id="finding-2-imports-didnt-retreat-australia-paid-up" class="level3">
+<h3 class="anchored" data-anchor-id="finding-2-imports-didnt-retreat-australia-paid-up">Finding 2: Imports didn’t retreat – Australia paid up</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-trade" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment4_HD_files/figure-html/fig-trade-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trade-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Australian goods exports and imports (nominal, seasonally adjusted), rebased to 2019 Q1 = 100. Shaded bands as in Figure 1.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>If businesses had responded to tripled shipping costs by cutting orders or hurriedly switching to local suppliers, we would expect a visible dent in import activity during 2021–22. The opposite happened: nominal import spending <em>rose</em> through the shock window, peaking around 142 – about 42% above the 2019 baseline – and never dipped below trend.</p>
+<p>One honest caveat: these are current-price values, so part of that rise <em>is</em> the higher freight and goods prices being passed through. But that’s precisely the absorption fingerprint – if adjustment had dominated, falling quantities would have dragged spending down despite higher prices. Instead, Australia kept importing and simply paid more.</p>
+<p><strong>The mechanism:</strong> qualifying a new supplier takes 6–12 months; paying a higher freight invoice is immediate. Absorption is the fast option, and the data says it’s the one firms took.</p>
+</section>
+<section id="finding-3-exposure-rankings-tell-a-story-and-a-cautionary-tale" class="level3">
+<h3 class="anchored" data-anchor-id="finding-3-exposure-rankings-tell-a-story-and-a-cautionary-tale">Finding 3: Exposure rankings tell a story – and a cautionary tale</h3>
+<p>If costs were absorbed, the pain should show up unevenly across sectors. To test this, I correlated each industry’s real (chain-volume) sales index with the sea-freight price index over the full 29-quarter window.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div id="fig-exposure" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-exposure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="assignment4_HD_files/figure-html/fig-exposure-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-exposure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Pearson correlation between each industry’s real sales index and the sea-freight PPI, 2019 Q1 – 2026 Q1.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small">
+<caption>Three most and three least freight-correlated industries.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Industry</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Correlation with sea-freight PPI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Wholesale trade</td>
+<td style="text-align: right;">0.64</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Professional, scientific and technical services</td>
+<td style="text-align: right;">0.62</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Electricity, gas, water and waste services</td>
+<td style="text-align: right;">0.47</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Manufacturing</td>
+<td style="text-align: right;">0.16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mining</td>
+<td style="text-align: right;">0.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Construction</td>
+<td style="text-align: right;">-0.01</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Wholesale trade tops the ranking (r ≈ 0.64), which fits the story perfectly – wholesalers are the sector whose stock literally arrives in containers, and their sales moved most closely with shipping costs. At the bottom sit Construction and Mining (r ≈ 0), domestically anchored sectors the shock largely bypassed.</p>
+<p>But the middle of the ranking is a lesson in critical thinking. Professional services correlates almost as highly as Wholesale – with no container ships involved – while Manufacturing, which I expected near the top, sits at only r ≈ 0.16. Correlations between <em>levels</em> of two series partly capture the fact that everything grew together through the post-COVID recovery, not just freight exposure. The signal is most trustworthy at the extremes (Wholesale clearly co-moves; Construction and Mining clearly don’t), and weakest in the middle.</p>
+<p>I tested this directly: recomputing every correlation on quarter-on-quarter <em>changes</em> instead of levels strips out the shared trend, and most of the relationships vanish – Wholesale falls from +0.64 to -0.13. Far from undermining the story, this strengthens it: quarter to quarter, sector sales simply did not respond to freight swings, which is exactly the fingerprint absorption should leave. The level correlations describe who lived through the shock alongside freight prices; the change correlations confirm nobody flinched in real time.</p>
+<p><strong>Policy implication:</strong> if governments want to cushion future freight shocks, the distribution-facing sectors – wholesale and retail trade – are where targeted support would land on genuine exposure. But any targeting rule built on raw correlations alone would mis-classify sectors, which is an argument for the lagged, causally identified analysis described in Behind the Scenes.</p>
+</section>
+<section id="the-bottom-line" class="level3">
+<h3 class="anchored" data-anchor-id="the-bottom-line">The bottom line</h3>
+<p>Australia’s supply chains proved resilient through <strong>cost absorption, not adjustment</strong>. Sea-freight prices tripled (Finding 1), import spending rose rather than retreated (Finding 2), and co-movement with freight costs concentrated in the distribution-facing sectors that physically handle imports (Finding 3). Businesses bent under the pressure but didn’t break their supply chains – a resilience that came at the cost of compressed margins and, ultimately, higher consumer prices.</p>
+<p>One caveat before you cite this in your own work: everything above is co-movement, not causation. Freight prices, import spending and sector sales could all be responding to a third force such as global demand. The Behind the Scenes tab discusses what a causal version of this analysis would need.</p>
+</section>
+<section id="references-1" class="level3">
+<h3 class="anchored" data-anchor-id="references-1">References</h3>
+<p>Australian Bureau of Statistics. (2026). <em>Producer Price Indexes, Australia</em> (cat. 6427.0); <em>International Trade in Goods, Australia</em> (cat. 5368.0); <em>Business Indicators, Australia</em> (cat. 5676.0). <a href="https://www.abs.gov.au" class="uri">https://www.abs.gov.au</a>. Accessed 6 June 2026.</p>
+<p>Full data and software citations are listed in the Data Details tab.</p>
+<hr>
+</section>
+</section>
+<section id="behind-the-scenes" class="level2">
+<h2 class="anchored" data-anchor-id="behind-the-scenes">Behind the Scenes</h2>
+<section id="question-4-what-was-tedious" class="level3">
+<h3 class="anchored" data-anchor-id="question-4-what-was-tedious">Question 4: What Was Tedious?</h3>
+<p>Series ID validation took the most time. The business dataset lists 15 industries three times (Original, Seasonally Adjusted, Trend). I had to verify which series type matched my raw data file. Initially I grabbed Original series, but ~20% of recent quarters were missing. Switching to Seasonally Adjusted fixed this but required manual cross-referencing with the ABS data dictionary.</p>
+<p><strong>Lesson:</strong> Always validate data completeness before starting analysis. One wrong series ID choice cascades through everything.</p>
+<hr>
+</section>
+<section id="question-5-what-surprised-you" class="level3">
+<h3 class="anchored" data-anchor-id="question-5-what-surprised-you">Question 5: What Surprised You?</h3>
+<p>I expected import volumes to collapse during the 2022 container crisis when freight costs spiked. They didn’t. Trade flowed on as normal. This forced me to reframe the question: not “Do volumes change?” but “How do volumes respond <em>given</em> the magnitude of the shock?”</p>
+<p><strong>The insight:</strong> Supply chains have inertia. Businesses can’t pivot suppliers overnight. They absorb costs instead.</p>
+<hr>
+</section>
+<section id="question-6-what-are-the-limits" class="level3">
+<h3 class="anchored" data-anchor-id="question-6-what-are-the-limits">Question 6: What Are the Limits?</h3>
+<p><strong>Causality problem:</strong> I show correlation between freight PPI and business sales. But both could respond to a third factor (global demand). A proper analysis would use instrumental variables (e.g., geopolitical shocks as exogenous freight-price drivers).</p>
+<p><strong>Data gaps:</strong> Confidentiality suppresses ~5% of trade. Micro businesses are excluded. Air freight has only recent data. These don’t break the analysis but limit its precision.</p>
+<p><strong>Future work:</strong> Test lagged responses (do sectors react with a 1–2 quarter delay?), control for FX, examine modal substitution using National Freight Data Hub.</p>
+<hr>
+</section>
+<section id="question-7-how-did-you-use-ai" class="level3">
+<h3 class="anchored" data-anchor-id="question-7-how-did-you-use-ai">Question 7: How Did You Use AI?</h3>
+<p>AI was useful for scaffolding (writing function templates, tidying workflows) but unreliable on domain specifics. When I asked for “series IDs for freight PPI,” AI hallucinated IDs that didn’t exist. I verified every ID manually against the ABS files—AI was wrong ~40% of the time.</p>
+<p><strong>Best use case:</strong> “Generate a pivot_longer() pipeline for wide data” → Works. “Give me the right series ID” → Verify manually.</p>
+<p><strong>Lesson:</strong> AI accelerates execution but can’t substitute for domain knowledge.</p>
+<hr>
+</section>
+<section id="question-8-how-did-you-iterate" class="level3">
+<h3 class="anchored" data-anchor-id="question-8-how-did-you-iterate">Question 8: How Did You Iterate?</h3>
+<p>My iterations are the four commits at https://github.com/GauravWarke/etc5512-assignment4.git, so the full history is inspectable.</p>
+<p>v1: Complete draft written narrative-first — all three findings stated as claims the code would then have to prove or kill. Risky, but it gave every chunk a job.</p>
+<p>v2: Restructured against the rubric — runnable ingest pipeline, three figures, exposure table, blog trimmed to length.</p>
+<p>v3: Verified everything against the raw ABS files. This caught a lookup transcription error , corrected the sea-freight peak to ~302, and added the QoQ robustness check.</p>
+<p>v4: Completed reflections and final polish for submission. Versus my initial checklist: the scope grew from one dataset to three joined ABS releases, and the question sharpened from “did trade change?” to “adjust or absorb?” once verified results showed imports never retreated.</p>
+<p>Lesson: Verification is iteration — v3 changed my numbers and my confidence more than any restructure did.</p>
+<hr>
+<p>Last updated: June 12, 2026</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
